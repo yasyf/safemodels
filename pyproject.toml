@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "safemodels"
+version = "0.1.0"
+description = "safetensors with model weight hashing"
+authors = ["Yasyf Mohamedali <yasyfm@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9.15"
+safetensors = "^0.3.1"
+numpy = "^1.25.1"
+xxhash = "^3.2.0"
+huggingface-hub = { version = "^0.16.4", optional = true }
+torch = { version = "^2.0.1", optional = true }
+
+
+[tool.poetry.group.dev.dependencies]
+pdbpp = "^0.10.3"
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
