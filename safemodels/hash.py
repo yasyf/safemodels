@@ -2,14 +2,14 @@ from typing import Generator
 
 import torch, xxhash, os
 import numpy as np
+from tqdm import tqdm
 
 from safetensors import safe_open
 
 
 def _hash(arrs: Generator[np.ndarray, None, None]) -> int:
     x = xxhash.xxh64()
-    for arr in arrs:
-        print(f"Hashing {arr.shape} array")
+    for arr in tqdm(arrs):
         for chunk in np.nditer(arr, flags=["buffered", "external_loop"]):
             x.update(memoryview(chunk))
     return x.intdigest()
