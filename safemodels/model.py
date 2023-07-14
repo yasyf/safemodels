@@ -3,7 +3,9 @@ from typing import Union
 from pydantic import BaseModel, ConfigDict
 from safemodels import safe_hash
 from huggingface_hub import hf_hub_download
+
 from safemodels.utils.safetensors import extract_metadata, update_meta
+from safemodels.cosign import Cosign
 
 
 class SafeModelsError(Exception):
@@ -20,6 +22,11 @@ class HashMismatch(SafeModelsError, ValueError):
         super().__init__("Loaded a safetensor with a mismatched hash!")
 
 
+class InvalidSignature(HashMismatch):
+    def __init__(self) -> None:
+        ValueError.__init__(self, "Loaded a safetensor with an invalid signature!")
+
+
 class NoHashInDatabase(SafeModelsError, KeyError):
     pass
 
@@ -31,8 +38,12 @@ class Hash(BaseModel):
     version: str
     hash: str
 
-    def rewrite_safetensor(self, filename: Union[str, Path]):
-        update_meta(filename, self.model_dump())
+    def sign_safetensor(self, filename: Union[str, Path]):
+        sig = Cosign().sign(self.model_dump_json())
+        update_meta(filename, {"sig": sig, **self.model_dump()})
+
+    def verify(self, sig: str, **kwargs):
+        return Cosign().verify(self.model_dump_json(), sig, **kwargs)
 
     @classmethod
     def from_safetensor(cls, filename: Union[str, Path]):

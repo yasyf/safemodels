@@ -2,7 +2,7 @@ from functools import cached_property, lru_cache
 import io
 from pathlib import Path
 import shutil
-from typing import Union
+from typing import ClassVar, NamedTuple, Union
 from subprocess import run
 import yaml
 from threading import Lock
@@ -10,10 +10,27 @@ from threading import Lock
 from safemodels.model import Hash, NoHashInDatabase
 
 
+class Issuer(NamedTuple):
+    issuer: str = ".*"
+    identity: str = ".*"
+
+
+Issuers = list[Issuer]
+
+
 class HashRepo:
     REPO = "yasyf/safemodels"
     TAG = "main"
     HASH_DIR = Path.home() / ".config" / ".safemodels" / "hashes"
+
+    allowed_issuers: ClassVar[Issuers] = [Issuer()]
+
+    @classmethod
+    def check(cls, hash: Hash, sig: str):
+        return any(
+            hash.verify(sig, issuer=issuer, identity=identity)
+            for issuer, identity in cls.allowed_issuers
+        )
 
     @classmethod
     @property
