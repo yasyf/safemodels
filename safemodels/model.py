@@ -57,7 +57,7 @@ class Hash(BaseModel):
     @classmethod
     def from_hf(cls, name: str, version: str, filename: str = "model.safetensors"):
         file = hf_hub_download(name, revision=version, filename=filename)
-        return cls.from_tensor(name, version, file)
+        return file, cls.from_tensor(name, version, file)
 
     @classmethod
     def from_tensor(cls, name: str, version: str, filename: Union[str, Path]):
