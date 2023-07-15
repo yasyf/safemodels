@@ -50,7 +50,7 @@ class Hash(BaseModel):
         meta = extract_metadata(filename)
         if "hash" not in meta:
             raise HashMissing()
-        if meta["hash"] != str(safe_hash(filename)):
+        if meta["hash"] != safe_hash(filename):
             raise HashMismatch()
         return cls(**meta)
 
@@ -61,4 +61,4 @@ class Hash(BaseModel):
 
     @classmethod
     def from_tensor(cls, name: str, version: str, filename: Union[str, Path]):
-        return cls(name=name, version=version, hash=str(safe_hash(filename)))
+        return cls(name=name, version=version, hash=safe_hash(filename))

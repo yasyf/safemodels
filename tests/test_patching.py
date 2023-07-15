@@ -16,7 +16,7 @@ def run_around_tests():
 @pytest.fixture
 def signed_sf_filename(tiny_sf_filename):
     hash = Hash(
-        name="hustvl/yolos-tiny", version="main", hash=str(safe_hash(tiny_sf_filename))
+        name="hustvl/yolos-tiny", version="main", hash=safe_hash(tiny_sf_filename)
     )
     hash.sign_safetensor(tiny_sf_filename)
     return tiny_sf_filename

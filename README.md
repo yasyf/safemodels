@@ -20,7 +20,7 @@ from huggingface_hub import hf_hub_download as dl
 st = dl("gpt2", filename="model.safetensors")
 pt = dl("gpt2", filename="pytorch_model.bin")
 
-assert safe_hash(st) == safe_hash(pt) == 11799646609665420805
+assert safe_hash(st) == safe_hash(pt) == 'd6c60a3126ef088e5f8fdaa332da56d552da966a'
 ```
 
 ### Signing
@@ -48,8 +48,7 @@ sm.sign_safetensor(st) # backwards-compatible rewrite of file
 >>> hf_hub_download("EleuterAI/gpt-j-6B", filename="model.safetensors")
 Downloading model.safetensors: 100%|███| 548M/548M [00:14<00:00, 39.2MB/s]
 211it [00:00, 4785.46it/s]
-Error: none of the expected identities matched what was in the certificate,
-got subjects [EleuterAI] with issuer https://auth.huggingface.com
+Error: none of the expected identities matched what was in the certificate, got subjects [EleuterAI] with issuer https://auth.huggingface.com
 Traceback (most recent call last):
   ...
 safemodels.InvalidSignature: Loaded a safetensor with an invalid signature!

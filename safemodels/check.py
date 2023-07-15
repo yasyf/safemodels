@@ -35,9 +35,7 @@ def _check(name: str, filename: str, version: str = "main"):
     meta = extract_metadata(filename)
     if "sig" not in meta:
         warnings.warn(f"Signature missing for {name} ({version})")
-    elif not HashRepo.check(
-        Hash(name=name, version=version, hash=str(hash)), meta["sig"]
-    ):
+    elif not HashRepo.check(Hash(name=name, version=version, hash=hash), meta["sig"]):
         warnings.warn(f"Signature mismatch for {name} ({version})")
         raise InvalidSignature()
 
@@ -49,7 +47,7 @@ def _check(name: str, filename: str, version: str = "main"):
             f"Hash for {name} ({version}) not found in database. Adding for future."
         )
     else:
-        if str(hash) != check.hash:
+        if hash != check.hash:
             warnings.warn(f"Hash mismatch for {name} ({version})")
             raise HashMismatch()
 

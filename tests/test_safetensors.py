@@ -10,7 +10,7 @@ def test_no_hash(sf_filename):
 
 
 def test_rewrite(sf_filename):
-    hash = Hash(name="gpt2", version="main", hash=str(safe_hash(sf_filename)))
+    hash = Hash(name="gpt2", version="main", hash=safe_hash(sf_filename))
     hash.sign_safetensor(sf_filename)
     assert hash.model_dump().items() <= extract_metadata(sf_filename).items()
     assert Hash.from_safetensor(sf_filename) == hash
